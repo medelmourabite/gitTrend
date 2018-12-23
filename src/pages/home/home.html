@@ -1,14 +1,42 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Trending Repos
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content no-padding>
+
+
+  <ion-list>
+    <ion-card class="card-repo" *ngFor="let rep of repos; let i = index">
+      <ion-row>
+        <h3 class="repo-name">{{rep.name}}</h3>
+        <p class="repo-desc">{{rep.description}}</p>
+      </ion-row>
+
+      <ion-row>
+        <ion-item>
+          <ion-avatar item-start>
+            <img class="image" [src]=" rep.owner.avatar_url" />
+          </ion-avatar>
+          {{rep.owner.login}}
+          <div item-end class="text-align-right">
+            <ion-icon name="star"></ion-icon> {{formatNumber(rep.stargazers_count)}}
+          </div>
+        </ion-item>
+      </ion-row>
+    </ion-card>
+  </ion-list>
+
+  <ion-card class="not-connected" padding *ngIf="!connected">
+    <ion-icon name="wifi"></ion-icon> Please check your internet connection
+    <button ion-button full (click)="loadMore(null)">Reload</button>
+  </ion-card>
+
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
